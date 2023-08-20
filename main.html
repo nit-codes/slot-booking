@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Parking Lot Reservation</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #222;
+    color: #ddd;
+  }
+  .parking-lot {
+    display: grid;
+    grid-template-columns: repeat(50, 20px);
+    grid-gap: 75px;
+    margin-top: 20px;
+  }
+  .parking-space {
+    width: 75px;
+    height: 75px;
+    border: 1px solid #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+  }
+  .occupied {
+    background-color: #991c1c;
+  }
+  .vacant {
+    background-color: #1c991c;
+  }
+  .booking-form {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #333;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 200px;
+  }
+  .input-group {
+    margin-bottom: 10px;
+  }
+  .input-label {
+    display: inline-block;
+    width: 100px;
+    color: #ddd;
+  }
+  .input-field {
+    padding: 5px;
+    width: 100px;
+    background-color: #444;
+    color: #ddd;
+    border: 1px solid #666;
+  }
+  button[type="submit"] {
+    background-color: #1466d9;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<center><h1>PARKING LOT RESERVATION</h1></center>
+
+<center><div class="booking-form">
+  <h2>Book a Parking Slot</h2>
+  <form id="bookingForm">
+    <div class="input-group">
+      <label class="input-label" for="carNumber">Car Number:</label>
+      <input class="input-field" type="text" id="carNumber" name="carNumber" placeholder="Enter car number">
+    </div>
+    <div class="input-group">
+      <label class="input-label" for="slotNumber">Slot Number:</label>
+      <input class="input-field" type="number" id="slotNumber" name="slotNumber" placeholder="Enter slot number">
+    </div>
+    <button type="submit">Book Slot</button>
+  </form>
+</div>
+
+<div class="parking-lot">
+  <!-- You can modify this part to represent your parking lot grid -->
+  <!-- For simplicity, only a small portion of the grid is shown with cars and vacancies -->
+  <div class="parking-space vacant">1</div>
+  <div class="parking-space vacant">2</div>
+  <div class="parking-space vacant">3</div>
+  <div class="parking-space vacant">4</div>
+  <div class="parking-space vacant">5</div>
+  <div class="parking-space vacant">6</div>
+  <div class="parking-space vacant">7</div>
+  <div class="parking-space vacant">8</div>
+  <div class="parking-space vacant">9</div>
+  <div class="parking-space vacant">10</div>
+  <div class="parking-space vacant">11</div>
+  <div class="parking-space vacant">12</div>
+  <div class="parking-space vacant">13</div>
+  <div class="parking-space vacant">14</div>
+  <div class="parking-space vacant">15</div>
+  <div class="parking-space vacant">16</div>
+  <!-- ... More parking spaces ... -->
+</div></center>
+<div class="parking-lot">
+    <!-- You can modify this part to represent your parking lot grid -->
+    <!-- For simplicity, only a small portion of the grid is shown with cars and vacancies -->
+    <div class="parking-space vacant">17</div>
+    <div class="parking-space vacant">18</div>
+    <div class="parking-space vacant">19</div>
+    <div class="parking-space vacant">20</div>
+    <div class="parking-space vacant">21</div>
+    <div class="parking-space vacant">22</div>
+    <div class="parking-space vacant">23</div>
+    <div class="parking-space vacant">24</div>
+    <div class="parking-space vacant">25</div>
+    <div class="parking-space vacant">26</div>
+    <div class="parking-space vacant">27</div>
+    <div class="parking-space vacant">28</div>
+    <div class="parking-space vacant">29</div>
+    <div class="parking-space vacant">30</div>
+    <div class="parking-space vacant">31</div>
+    <div class="parking-space vacant"></div>
+    <!-- ... More parking spaces ... -->
+  </div></center>
+  
+<script>
+  const bookingForm = document.getElementById('bookingForm');
+  const parkingSpaces = document.querySelectorAll('.parking-space');
+
+  bookingForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const carNumber = this.carNumber.value;
+    const slotNumber = parseInt(this.slotNumber.value) - 1;
+
+    if (slotNumber >= 0 && slotNumber < parkingSpaces.length) {
+      const selectedSpace = parkingSpaces[slotNumber];
+      if (selectedSpace.classList.contains('vacant')) {
+        selectedSpace.classList.remove('vacant');
+        selectedSpace.classList.add('occupied');
+        selectedSpace.textContent = carNumber;
+        alert('The slot has been successfully booked for you. Kindly park at your slot. ')
+      } else {
+        const closestVacantSlot = findClosestVacantSlot(slotNumber);
+        if (closestVacantSlot !== null) {
+          this.slotNumber.value = closestVacantSlot + 1;
+          alert(`Slot ${slotNumber + 1} is occupied. Suggested closest vacant slot: ${closestVacantSlot + 1}`);
+        } else {
+          alert('All slots are occupied.');
+        }
+      }
+    } else {
+      alert('Invalid slot number.');
+    }
+  });
+
+  function findClosestVacantSlot(selectedSlot) {
+    let leftSlot = selectedSlot;
+    let rightSlot = selectedSlot;
+
+    while (leftSlot >= 0 || rightSlot < parkingSpaces.length) {
+      if (leftSlot >= 0 && parkingSpaces[leftSlot].classList.contains('vacant')) {
+        return leftSlot;
+      }
+      if (rightSlot < parkingSpaces.length && parkingSpaces[rightSlot].classList.contains('vacant')) {
+        return rightSlot;
+      }
+      leftSlot--;
+      rightSlot++;
+    }
+
+    return null;
+  }
+</script>
+</body>
+</html>
